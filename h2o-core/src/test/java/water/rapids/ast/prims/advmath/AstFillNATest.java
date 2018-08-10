@@ -2,6 +2,7 @@ package water.rapids.ast.prims.advmath;
 
 import org.junit.Assert;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import water.Scope;
 import water.TestUtil;
@@ -13,6 +14,9 @@ import water.rapids.Val;
 import water.rapids.vals.ValFrame;
 import water.util.ArrayUtils;
 import water.rapids.Session;
+
+import static org.junit.Assert.assertEquals;
+
 public class AstFillNATest extends TestUtil {
     @BeforeClass
     static public void setup() { stall_till_cloudsize(1); }
@@ -39,8 +43,28 @@ public class AstFillNATest extends TestUtil {
         } finally {
             Scope.exit();
         }
+    }
 
+    @Ignore
+    @Test public void MissingStringsFillNATest() {
+        Scope.enter();
+        try {
+            Session sess = new Session();
+            Frame fr = Scope.track(new TestFrameBuilder()
+                    .withName("testFrame", sess)
+                    .withColNames("C1")
+                    .withVecTypes(Vec.T_CAT)
+                    .withDataForCol(0, ar( "a", null))
+                    .build());
 
+            Val val = Rapids.exec("(h2o.fillna testFrame 'forward' 0 1)", sess);
+            Assert.assertTrue(val instanceof ValFrame);
+            Frame res = Scope.track(val.getFrame());
 
+            System.out.println(res.toTwoDimTable().toString());
+            assertEquals(res.vec(0).stringAt(1),  "<NA>");
+        } finally {
+            Scope.exit();
+        }
     }
 }
