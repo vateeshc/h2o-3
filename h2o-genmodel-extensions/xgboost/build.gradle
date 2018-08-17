@@ -5,7 +5,8 @@ description = "H2O GenModel XGBoost support"
 dependencies {
     compile project(":h2o-genmodel")
 
-    compile('biz.k11i:xgboost-predictor:0.3.0') {
+    compile('ai.h2o:xgboost-predictor-mr-build-pipeline:0.3.1-SNAPSHOT') {
+        changing = true
         exclude group: 'net.jafama', 'module': 'jafama'
     }
 
@@ -42,4 +43,3 @@ artifacts {
 }
 jar.dependsOn shadowJar
 build.dependsOn shadowJar
-
