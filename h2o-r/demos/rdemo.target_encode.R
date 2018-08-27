@@ -1,7 +1,9 @@
 library(h2o)
 h2o.init()
 
-dataPath <- h2o:::.h2o.locate("smalldata/gbm_test/titanic.csv")
+setwd("/Users/praneesh/Documents/h2o-3")
+
+dataPath <- h2o:::.h2o.locate("/Users/praneesh/Documents/h2o-3/titanic_train.csv")
 print("Importing titanic data into H2O")
 data <- h2o.importFile(path = dataPath, destination_frame = "data")
 data$survived <- as.factor(data$survived)
